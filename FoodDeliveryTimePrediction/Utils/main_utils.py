@@ -117,6 +117,6 @@ class TimePredictionModel:
         try:
             x_transform=self.preprocessor.transform(x)
             y_pred=self.model.predict(x_transform)
-            return x_transform
+            return y_pred
         except Exception as e:
             raise FoodDeliveryTimePredictionException(e,sys)
