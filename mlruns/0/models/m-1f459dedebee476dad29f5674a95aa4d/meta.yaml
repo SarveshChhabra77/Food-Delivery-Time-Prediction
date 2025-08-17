@@ -1,0 +1,10 @@
+artifact_location: file:///D:/Food%20Delivery%20Time%20Prediction/mlruns/0/models/m-1f459dedebee476dad29f5674a95aa4d/artifacts
+creation_timestamp: 1755456545895
+experiment_id: '0'
+last_updated_timestamp: 1755456552567
+model_id: m-1f459dedebee476dad29f5674a95aa4d
+model_type: null
+name: model
+source_run_id: 2269abf59b2d44d0a1695cc75fbfe968
+status: 2
+status_message: null

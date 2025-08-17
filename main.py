@@ -1,7 +1,8 @@
 from FoodDeliveryTimePrediction.Logging.logger import logging
 from FoodDeliveryTimePrediction.Exception.exception import FoodDeliveryTimePredictionException
-from FoodDeliveryTimePrediction.Entity.config_entity import TrainingPipelineConfig,DataIngestionConfig,DataValidationConfig,DataTransformationConfig
+from FoodDeliveryTimePrediction.Entity.config_entity import TrainingPipelineConfig,DataIngestionConfig,DataValidationConfig,DataTransformationConfig,ModelTrainerConfig
 from FoodDeliveryTimePrediction.Src.Data_Transformation.data_transformation import DataTransformation
+from FoodDeliveryTimePrediction.Src.Model_Trainer.model_trainer import ModelTrainer
 from FoodDeliveryTimePrediction.Src.Data_Ingestion.data_ingestion import DataIngestion
 from FoodDeliveryTimePrediction.Src.Data_Validation.data_validation import DataValidation
 import sys
@@ -38,8 +39,19 @@ if __name__=='__main__':
         
         logging.info('Initiating Data Tranformation')
         data_transformation_artifact=data_transformation.initiate_data_transformation()
-        logging.info('data Transformation complted')
+        logging.info('Data Transformation complted')
         print(data_transformation_artifact)
+        
+        model_trainer_config=ModelTrainerConfig(training_pipeline_config)
+        
+        model_trainer=ModelTrainer(model_trainer_config=model_trainer_config,data_transformation_artifact=data_transformation_artifact)
+        
+        logging.info('Initiating Model trainer')
+        model_trainer_artifact=model_trainer.initiate_model_trainer()
+        logging.info('Model Training is completed')
+        print(model_trainer_artifact)
+        
+        
         
         
     except Exception as e:

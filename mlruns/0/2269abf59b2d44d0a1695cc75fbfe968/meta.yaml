@@ -1,0 +1,14 @@
+artifact_uri: file:///D:/Food%20Delivery%20Time%20Prediction/mlruns/0/2269abf59b2d44d0a1695cc75fbfe968/artifacts
+end_time: 1755456552584
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 2269abf59b2d44d0a1695cc75fbfe968
+run_name: gentle-penguin-854
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1755456545715
+status: 3
+tags: []
+user_id: HP

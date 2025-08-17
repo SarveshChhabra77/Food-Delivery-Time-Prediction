@@ -1,0 +1,14 @@
+artifact_uri: file:///D:/Food%20Delivery%20Time%20Prediction/mlruns/0/2b358e8bd2c24c95a50827f851c7b9c4/artifacts
+end_time: 1755456262963
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 2b358e8bd2c24c95a50827f851c7b9c4
+run_name: languid-penguin-53
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1755456256402
+status: 3
+tags: []
+user_id: HP

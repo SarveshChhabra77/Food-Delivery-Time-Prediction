@@ -1,0 +1,14 @@
+artifact_uri: file:///D:/Food%20Delivery%20Time%20Prediction/mlruns/0/41050979922c405e973b07ae054f214c/artifacts
+end_time: 1755456545686
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 41050979922c405e973b07ae054f214c
+run_name: spiffy-colt-627
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1755456536350
+status: 3
+tags: []
+user_id: HP

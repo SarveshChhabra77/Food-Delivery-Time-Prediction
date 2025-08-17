@@ -11,6 +11,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder,StandardScaler,OrdinalEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
+import numpy as np
 
 
 
@@ -94,19 +95,22 @@ class DataTransformation:
             transformed_input_train_feature=preprocessor.transform(input_feature_train_df)
             transformed_input_test_feature=preprocessor.transform(input_feature_test_df)
         
-            onehot_cols = preprocessor.named_transformers_['onehot']['onehot'].get_feature_names_out(['weather','Vehicle_Type'])
+            # onehot_cols = preprocessor.named_transformers_['onehot']['onehot'].get_feature_names_out(['weather','Vehicle_Type'])
                     
-            all_cols = ['Distance_km', 'Preparation_Time_min', 'Courier_Experience_yrs'] + list(onehot_cols) + ['Traffic_Level_encoded', 'Time_of_day_encoded']
+            # all_cols = ['Distance_km', 'Preparation_Time_min', 'Courier_Experience_yrs'] + list(onehot_cols) + ['Traffic_Level_encoded', 'Time_of_day_encoded']
             
-            transformed_input_train_df=pd.DataFrame(transformed_input_train_feature,columns=all_cols)    
+            # transformed_input_train_df=pd.DataFrame(transformed_input_train_feature,columns=all_cols)    
             
-            transformed_input_test_df=pd.DataFrame(transformed_input_test_feature,columns=all_cols)   
+            # transformed_input_test_df=pd.DataFrame(transformed_input_test_feature,columns=all_cols)   
             
-            final_train_df=pd.concat([transformed_input_train_df,target_feature_train_df.reset_index(drop=True)],axis=1)
-            final_train_df=final_train_df.to_numpy()
+            # final_train_df=pd.concat([transformed_input_train_df,target_feature_train_df.reset_index(drop=True)],axis=1)
+            # final_train_df=final_train_df.to_numpy()
             
-            final_test_df=pd.concat([transformed_input_test_df,target_feature_test_df.reset_index(drop=True)],axis=1)
-            final_test_df=final_test_df.to_numpy()
+            # final_test_df=pd.concat([transformed_input_test_df,target_feature_test_df.reset_index(drop=True)],axis=1)
+            # final_test_df=final_test_df.to_numpy()
+            final_train_df = np.c_[transformed_input_train_feature, target_feature_train_df.to_numpy()]
+            final_test_df = np.c_[transformed_input_test_feature, target_feature_test_df.to_numpy()]
+
             
             save_numpy_array_data(self.data_transformation_config.transformed_train_file_path,final_train_df)
             save_numpy_array_data(self.data_transformation_config.transformed_test_file_path,final_test_df)
