@@ -7,8 +7,8 @@ from FoodDeliveryTimePrediction.Utils.main_utils import TimePredictionModel
 import streamlit as st
 import pandas as pd
 
-model = load_object('final_model\model.pkl')
-preprocessor = load_object('final_model\preprocessor.pkl')
+model = load_object(r'final_model\model.pkl')
+preprocessor = load_object(r'final_model\preprocessor.pkl')
 final_model=TimePredictionModel(preprocessor=preprocessor,model=model)
     
 
