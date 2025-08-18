@@ -7,7 +7,6 @@ from FoodDeliveryTimePrediction.Entity.config_entity import DataIngestionConfig
 from FoodDeliveryTimePrediction.Entity.artifacts_entity import DataIngestionArtifacts
 from sklearn.model_selection import train_test_split
 import pandas as pd
-import numpy as np
 
 
 class DataIngestion:
@@ -39,9 +38,11 @@ class DataIngestion:
     
     def split_data_as_train_test(self,dataframe:pd.DataFrame):
         try:
-            train_set,test_set=train_test_split(dataframe,test_size=self.data_ingestion_config.train_test_split_ratio)
+            
 
             logging.info('Perform Train Test Split on the Dataframe')
+            
+            train_set,test_set=train_test_split(dataframe,test_size=self.data_ingestion_config.train_test_split_ratio,random_state=42)
 
             logging.info('Exited split_data_as_train_test of Data_Ingestion Class')
 

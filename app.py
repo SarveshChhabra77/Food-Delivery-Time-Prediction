@@ -34,7 +34,7 @@ with col1:
 with col2:
     vehicle = st.selectbox("Vehicle Type", ["Bike", "Scooter", "Car"])
     preparation_time = st.number_input("Preparation Time (min)", min_value=1, max_value=60, value=15)
-    courier_experience = st.number_input("Courier Experience (yrs)", min_value=0.0, max_value=20.0, value=2.0, step=0.5)
+    # courier_experience = st.number_input("Courier Experience (yrs)", min_value=0.0, max_value=20.0, value=2.0, step=0.5)
 
 if st.button("Predict Delivery Time"):
     try:
@@ -45,8 +45,7 @@ if st.button("Predict Delivery Time"):
             traffic,
             time_of_day,
             vehicle,
-            preparation_time,
-            courier_experience
+            preparation_time
         ]], columns=[
             "Distance_km",
             "Weather",
@@ -54,7 +53,6 @@ if st.button("Predict Delivery Time"):
             "Time_of_Day",
             "Vehicle_Type",
             "Preparation_Time_min",
-            "Courier_Experience_yrs"
         ])
 
         # Predict

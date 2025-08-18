@@ -6,10 +6,9 @@ import os
 import pandas as pd
 import sys
 from typing import Dict, Any, List, Union
-from Data_Schema import SCHEMA
 from scipy.stats import ks_2samp
 from FoodDeliveryTimePrediction.Utils.main_utils import write_yaml_file
-from Data_Schema import SCHEMA
+from Data_Schema import Required_Columns
 
 class DataValidation:
     """
@@ -56,9 +55,11 @@ class DataValidation:
 
                 if missing_columns:
                     logging.info(f"Validation FAILED: Missing columns: {missing_columns}")
+                    return False
                 if extra_columns:
-                    logging.info(f"Validation FAILED: Extra columns found: {extra_columns}")
-                return False
+                    logging.info(f"Extra columns found: {extra_columns}. Dropping Them")
+                    dataframe.drop(columns=list(extra_columns),inplace=True) 
+                    ## convert set into list
 
             # --- Step 2: Validate column data types ---
             for column, expected_dtypes in schema.items():
@@ -73,7 +74,7 @@ class DataValidation:
                         f"Validation FAILED: Column '{column}' has dtype '{actual_dtype}', "
                         f"expected one of {expected_dtypes}"
                     )
-                    raise False
+                    return False
 
             logging.info("Validation PASSED: DataFrame schema is correct.")
             return True
@@ -168,11 +169,11 @@ class DataValidation:
             test_df = self.read_data(test_file_path)
 
             # --- Step 2: Schema validation ---
-            status = self.validate_dataframe_schema(train_df,SCHEMA)
+            status = self.validate_dataframe_schema(train_df,Required_Columns)
             if not status:
                 logging.info('Train dataframe does not contain all required columns.')
 
-            status = self.validate_dataframe_schema(test_df,SCHEMA)
+            status = self.validate_dataframe_schema(test_df,Required_Columns)
             if not status:
                 logging.info('Test dataframe does not contain all required columns.')
 

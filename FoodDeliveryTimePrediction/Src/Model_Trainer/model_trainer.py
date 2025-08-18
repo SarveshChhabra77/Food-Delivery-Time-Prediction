@@ -84,20 +84,27 @@ class ModelTrainer:
 
                 },
                 
-                "CatBoost": {
-                    "depth": [4, 6, 8, 10],
-                    "learning_rate": [0.01, 0.05, 0.1, 0.2],
-                    "iterations": [200, 500, 800]
+                'CatBoost' : {
+                    "depth": [7, 8, 9],
+                    "learning_rate": [0.02, 0.03, 0.04],
+                    "iterations": [300, 500, 800],   # try longer training
+                    "l2_leaf_reg": [5, 6, 7, 8],
+                    "bagging_temperature": [0.3, 0.5, 0.7],
+                    "random_strength": [1, 2, 3],
+                    "min_data_in_leaf": [5, 10, 20],
+                    "rsm": [0.7, 0.8, 0.9],
+                    "max_bin": [254, 512],
+                    "grow_policy": ["SymmetricTree", "Lossguide"]
                 }
             }
             
-            model_report:dict=evaluate_models(x_train=x_train,y_train=y_train,x_test=x_test,y_test=y_test,models=models,params=param_grids)
+            model_report,tunned_models=evaluate_models(x_train=x_train,y_train=y_train,x_test=x_test,y_test=y_test,models=models,params=param_grids)
 
             best_model_score=max(list(model_report.values()))
             best_model_name=list(model_report.keys())[list(model_report.values()).index(best_model_score)]
             
             
-            best_model=models[best_model_name]
+            best_model=tunned_models[best_model_name]
             
             y_train_pred=best_model.predict(x_train)
             
@@ -108,8 +115,6 @@ class ModelTrainer:
             y_test_pred=best_model.predict(x_test)
             
             regression_test_metrics=get_regression_score(y_test,y_test_pred)
-            
-            self.track_mlflow(best_model,regression_train_metrics)
             
             self.track_mlflow(best_model,regression_test_metrics)
             

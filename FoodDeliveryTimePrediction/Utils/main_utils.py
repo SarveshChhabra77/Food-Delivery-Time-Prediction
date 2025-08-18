@@ -66,25 +66,24 @@ def load_numpy_array_data(file_path:str)->np.array:
 def evaluate_models(x_train,y_train,x_test,y_test,models,params):
     try:
         report={}
-        
-        for i in range(len(models)):
-            model = list(models.values())[i]
-            model_name=list(models.keys())[i]
+        tunned_Models={}
+        for model_name,model in models.items():
+            
             para=params[model_name]
             
-            rcv=RandomizedSearchCV(model,para,cv=5,n_jobs=-1,n_iter=20)
+            rcv=RandomizedSearchCV(model,para,cv=5,n_jobs=-1,n_iter=20,random_state=42)
             rcv.fit(x_train,y_train)
             
-            model.set_params(**rcv.best_params_)
-            model.fit(x_train,y_train)
+            best_model=rcv.best_estimator_
             
-            y_pred=model.predict(x_test)
+            y_pred=best_model.predict(x_test)
             
             test_model_r2_score=r2_score(y_test,y_pred)
             
             report[model_name]=test_model_r2_score
+            tunned_Models[model_name]=best_model
             
-            return report
+        return report,tunned_Models
         
     except Exception as e:
         raise FoodDeliveryTimePredictionException(e,sys)

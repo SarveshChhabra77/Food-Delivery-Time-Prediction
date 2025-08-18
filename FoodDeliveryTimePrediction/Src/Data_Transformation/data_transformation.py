@@ -33,9 +33,10 @@ class DataTransformation:
     def build_preprocessor(self)->ColumnTransformer:
         
         try:
-            numerical_features = ['Distance_km', 'Preparation_Time_min', 'Courier_Experience_yrs']
+            numerical_features = ['Distance_km', 'Preparation_Time_min']
             categorical_onehot = ['Weather', 'Vehicle_Type']
             categorical_ordinal = ['Traffic_Level', 'Time_of_Day']
+            
             
             ## Defining oridinal categories
             traffic_mapping = ['Low', 'Medium', 'High']
