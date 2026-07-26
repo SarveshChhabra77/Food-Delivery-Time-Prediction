@@ -104,7 +104,7 @@ class DataValidation:
         except Exception as e:
             raise FoodDeliveryTimePredictionException(e, sys)
 
-    def detect_dataset_drift(self, base_df: dict, current_df: dict, threshold=0.05) -> bool:
+    def detect_dataset_drift(self, base_df: pd.DataFrame, current_df: pd.DataFrame, threshold=0.05) -> bool:
         """
         Detects dataset drift between base (train) data and current (test) data.
         Uses Kolmogorov-Smirnov test to compare distributions for each column.

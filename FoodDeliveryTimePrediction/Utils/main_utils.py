@@ -8,6 +8,9 @@ from sklearn.model_selection import RandomizedSearchCV
 from sklearn.metrics import root_mean_squared_error,mean_squared_error,r2_score
 from FoodDeliveryTimePrediction.Entity.artifacts_entity import RegressionMetricArtifact
 
+
+
+
 def write_yaml_file(file_path:str,content:object,replace:bool=False)->None:
     try:
         if os.path.exists(file_path):
@@ -42,6 +45,15 @@ def save_obj(file_path:str,obj:object)->None:
     except Exception as e:
         raise FoodDeliveryTimePredictionException(e,sys)
     
+def load_numpy_array_data(file_path:str)->np.array:
+    try:
+        if not os.path.exists(file_path):
+            raise Exception(f'File path : {file_path} not exist')
+        with open(file_path,'rb') as file_obj:
+            return np.load(file_obj)
+    except Exception as e:
+        raise FoodDeliveryTimePredictionException(e,sys)
+    
     
 def load_object(file_path:str)->object:
     try:
@@ -53,12 +65,30 @@ def load_object(file_path:str)->object:
         raise FoodDeliveryTimePredictionException(e,sys)
     
     
-def load_numpy_array_data(file_path:str)->np.array:
+
+    
+def evaluate_and_tunned(x_train,y_train,x_test,y_test,models,params):
     try:
-        if not os.path.exists(file_path):
-            raise Exception(f'File path : {file_path} not exist')
-        with open(file_path,'rb') as file_obj:
-            return np.load(file_obj)
+        report={}
+        tunned_Models={}
+        for model_name,model in models.items():
+            
+            para=params[model_name]
+            
+            rcv=RandomizedSearchCV(model,para,cv=5,n_jobs=-1,n_iter=20,random_state=42)
+            rcv.fit(x_train,y_train)
+            
+            best_model=rcv.best_estimator_
+            
+            y_pred=best_model.predict(x_test)
+            
+            test_model_r2_score=r2_score(y_test,y_pred)
+            
+            report[model_name]=test_model_r2_score
+            tunned_Models[model_name]=best_model
+            
+        return report,tunned_Models
+        
     except Exception as e:
         raise FoodDeliveryTimePredictionException(e,sys)
     

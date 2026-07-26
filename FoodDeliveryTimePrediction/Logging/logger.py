@@ -20,4 +20,3 @@ logging.basicConfig(
 )
 
 
-logging.info("Logging file has made")

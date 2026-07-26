@@ -4,3 +4,6 @@ logs
 catboost_info
 mlruns
 FoodDeliveryTimePrediction.zip
+__pycache__/
+*.pyc
+**/__pycache__/

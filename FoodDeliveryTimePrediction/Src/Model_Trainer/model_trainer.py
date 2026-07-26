@@ -50,53 +50,121 @@ class ModelTrainer:
                 'CatBoost': CatBoostRegressor(verbose=0)
             }
             param_grids = {
-                "DecisionTree": {
-                    "max_depth": [None, 5, 10, 20, 30],
-                    "min_samples_split": [2, 5, 10],
-                    "min_samples_leaf": [1, 2, 4],
-                    "max_features": [None, "sqrt", "log2"]
-                },
-                
-                "RandomForest": {
-                    "n_estimators": [100, 200, 300],
-                    "max_depth": [None, 10, 20, 30],
-                    "min_samples_split": [2, 5, 10],
-                    "min_samples_leaf": [1, 2, 4],
-                    "max_features": ["sqrt", "log2"]
-                },
-                
-                "AdaBoost": {
-                    "n_estimators": [50, 100, 200, 300],
-                    "learning_rate": [0.001, 0.01, 0.1, 0.5, 1]
-                },
-                
-                "GradientBoosting": {
-                    "n_estimators": [100, 200, 300],
-                    "learning_rate": [0.001, 0.01, 0.1, 0.2],
-                    "max_depth": [3, 5, 7],
-                
-                },
-                
-                "XGBoost": {
-                    "n_estimators": [100, 200, 300],
-                    "learning_rate": [0.001, 0.01, 0.1, 0.2],
-                    "max_depth": [3, 5, 7, 10],
+                        "Logistic Regression": [
+                            {   # L2 penalty
+                                "penalty": ["l2"],
+                                "C": [0.01, 0.1, 1, 10, 100],
+                                "solver": ["lbfgs", "liblinear", "saga", "newton-cg"],
+                                "max_iter": [100, 200, 500],
+                                "class_weight": [None, "balanced"]
+                            },
+                            {   # L1 penalty
+                                "penalty": ["l1"],
+                                "C": [0.01, 0.1, 1, 10, 100],
+                                "solver": ["liblinear", "saga"],
+                                "max_iter": [100, 200, 500],
+                                "class_weight": [None, "balanced"]
+                            },
+                            {   # ElasticNet penalty
+                                "penalty": ["elasticnet"],
+                                "C": [0.01, 0.1, 1, 10, 100],
+                                "solver": ["saga"],        # only saga supports elasticnet
+                                "l1_ratio": [0.1, 0.5, 0.9],
+                                "max_iter": [100, 200, 500],
+                                "class_weight": [None, "balanced"]
+                            },
+                            {   # No penalty
+                                "penalty": [None],         # must use None not "none"
+                                "solver": ["lbfgs", "newton-cg", "sag", "saga"],
+                                "max_iter": [100, 200, 500],
+                                "class_weight": [None, "balanced"]
+                            }
+                        ],
 
-                },
-                
-                'CatBoost' : {
-                    "depth": [7, 8, 9],
-                    "learning_rate": [0.02, 0.03, 0.04],
-                    "iterations": [300, 500, 800],   # try longer training
-                    "l2_leaf_reg": [5, 6, 7, 8],
-                    "bagging_temperature": [0.3, 0.5, 0.7],
-                    "random_strength": [1, 2, 3],
-                    "min_data_in_leaf": [5, 10, 20],
-                    "rsm": [0.7, 0.8, 0.9],
-                    "max_bin": [254, 512],
-                    "grow_policy": ["SymmetricTree", "Lossguide"]
-                }
-            }
+                        "K-Nearest Neighbors": {
+                            "n_neighbors": [3, 5, 7, 9, 11],
+                            "weights": ["uniform", "distance"],
+                            "metric": ["euclidean", "manhattan", "minkowski"],
+                            "p": [1, 2]
+                        },
+
+                        "Decision Tree": {
+                            "criterion": ["gini", "entropy"],
+                            "max_depth": [None, 5, 10, 20, 30],
+                            "min_samples_split": [2, 5, 10],
+                            "min_samples_leaf": [1, 2, 4],
+                            "max_features": [None, "sqrt", "log2"],
+                            "class_weight": [None, "balanced"]
+                        },
+
+                        "Random Forest": {
+                            "n_estimators": [100, 200, 300],
+                            "criterion": ["gini", "entropy"],
+                            "max_depth": [None, 10, 20, 30],
+                            "min_samples_split": [2, 5, 10],
+                            "min_samples_leaf": [1, 2, 4],
+                            "max_features": ["sqrt", "log2", None],
+                            "bootstrap": [True, False],
+                            "class_weight": [None, "balanced"]
+                        },
+
+                        "Extra Trees": {
+                            "n_estimators": [100, 200, 300],
+                            "criterion": ["gini", "entropy"],
+                            "max_depth": [None, 10, 20, 30],
+                            "min_samples_split": [2, 5, 10],
+                            "min_samples_leaf": [1, 2, 4],
+                            "max_features": ["sqrt", "log2", None],
+                            "bootstrap": [True, False],
+                            "class_weight": [None, "balanced"]
+                        },
+
+                        "AdaBoost": {
+                            "n_estimators": [50, 100, 200, 300],
+                            "learning_rate": [0.001, 0.01, 0.1, 0.5, 1],
+                            "algorithm": ["SAMME"]  # "SAMME.R" is deprecated & causes errors
+                        },
+
+                        "Gradient Boosting": {
+                            "n_estimators": [100, 200, 300],
+                            "learning_rate": [0.001, 0.01, 0.1, 0.2],
+                            "max_depth": [3, 5, 7],
+                            "min_samples_split": [2, 5, 10],
+                            "min_samples_leaf": [1, 2, 4],
+                            "subsample": [0.6, 0.8, 1.0],
+                            "max_features": [None, "sqrt", "log2"]
+                        },
+
+                        "XGBoost": {
+                            "n_estimators": [100, 200, 300],
+                            "learning_rate": [0.001, 0.01, 0.1, 0.2],
+                            "max_depth": [3, 5, 7, 10],
+                            "subsample": [0.6, 0.8, 1.0],
+                            "colsample_bytree": [0.6, 0.8, 1.0],
+                            "gamma": [0, 0.1, 0.3, 0.5],
+                            "reg_alpha": [0, 0.01, 0.1, 1],
+                            "reg_lambda": [1, 1.5, 2]
+                        },
+
+                        "CatBoost": {
+                            "depth": [4, 6, 8, 10, 12],
+                            "learning_rate": [0.01, 0.03, 0.05, 0.1, 0.2],
+                            "iterations": [200, 500, 800, 1000],
+                            "l2_leaf_reg": [1, 3, 5, 7, 9],
+                            "bagging_temperature": [0, 0.5, 1, 2, 5],
+                            "random_strength": [0, 1, 2, 5, 10],
+                            "rsm": [0.6, 0.8, 1.0],
+                            "grow_policy": ["SymmetricTree", "Depthwise", "Lossguide"],
+                            "min_data_in_leaf": [1, 5, 10, 20, 50],
+                            "max_bin": [128, 254, 512]
+                        },
+
+                        "Naive Bayes (Gaussian)": {
+                            "var_smoothing": [1e-9, 1e-8, 1e-7, 1e-6]
+                        }
+                    }
+
+
             
             model_report,tunned_models=evaluate_models(x_train=x_train,y_train=y_train,x_test=x_test,y_test=y_test,models=models,params=param_grids)
 
